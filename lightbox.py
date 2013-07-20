@@ -49,8 +49,11 @@ class Lightbox:
         return "<Hacktory Lightbox!>"
     
     def set(self,x,y,c):
+        if x >= self.width or y >= self.height: return False
+        if x < 0 or y < 0: return False
         self.pixels[x][y] = c
         self.hwset(x,y)
+        return True
         
     def hwset(self,x,y):
         c = self.pixels[x][y]
@@ -61,3 +64,22 @@ class Lightbox:
 
     def get(self,x,y):
         return self.pixels[x][y]
+    
+    def blit_pygame_surface(self,surface,left = 0,top = 0,width = None,
+                            height = None):
+        swidth = surface.get_width()
+        sheight = surface.get_height()
+        
+        if width == None: width = swidth
+        if height == None: height = sheight
+
+        for y in xrange(0,height):
+            for x in xrange(0,width):
+                if y >= sheight or x >= swidth:
+                    self.set(x + left, y + top, Color(0,0,0))
+                else:
+                    color = surface.get_at((x,y))
+                    color = Color(color.r, color.g, color.b)
+                    self.set(x + left, y + top, color)
+
+                
