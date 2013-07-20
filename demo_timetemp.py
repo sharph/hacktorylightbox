@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 
 '''
   Demo for the Hacktory's Lightbox (using the virtual lightbox
