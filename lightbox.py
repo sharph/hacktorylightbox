@@ -32,13 +32,13 @@ class Color:
                + str(self.g) + ", blue: " + str(self.b) + ">")
 
 class Lightbox:
-    pixels = None
-    ser = None
 
-    def __init__(self, height = 10, width = 16):
+    def __init__(self, height = 10, width = 16,
+                 fillcolor = Color(0,0,0)):
         self.width = width
         self.height = height
-        self.pixels = [ [ Color(0,0,0) for y in range(self.height) ]
+        self.fillcolor = fillcolor
+        self.pixels = [ [ fillcolor for y in range(self.height) ]
                    for x in range(self.width) ]
         self.init_screen()
 
@@ -66,17 +66,17 @@ class Lightbox:
         return self.pixels[x][y]
     
     def blit_pygame_surface(self,surface,left = 0,top = 0,width = None,
-                            height = None):
+                            height = None, startx = 0, starty = 0):
         swidth = surface.get_width()
         sheight = surface.get_height()
         
         if width == None: width = swidth
         if height == None: height = sheight
 
-        for y in xrange(0,height):
-            for x in xrange(0,width):
+        for y in xrange(starty,height):
+            for x in xrange(startx,width):
                 if y >= sheight or x >= swidth:
-                    self.set(x + left, y + top, Color(0,0,0))
+                    self.set(x + left, y + top, self.fillcolor)
                 else:
                     color = surface.get_at((x,y))
                     color = Color(color.r, color.g, color.b)
